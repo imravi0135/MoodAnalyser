@@ -6,6 +6,7 @@ namespace MoodAnalyserTest
     public class Tests
     {
         MoodAnalyser moodAnalyser;
+
         [SetUp]
         public void Setup()
         {
@@ -60,6 +61,37 @@ namespace MoodAnalyserTest
             catch (MoodAnalyserException exception)
             {
                 Assert.AreEqual(MoodAnalyserException.ExceptionType.EMPTY_MOOD, exception.exceptionType);
+            }
+        }
+        public void GivenMoodAnalyserClassName_WhenProper_ShouldReturnMoodAnalyserObject()
+        {
+            object expected = new MoodAnalyser();
+            object result = MoodAnalyserNameFactory.GetMoodAnalyserObject("MoodAnalyserNameSpace.MoodAnalyser", "MoodAnalyser");
+            expected.Equals(result);
+        }
+
+        [Test]
+        public void GivenMoodAnalyserClassName_WhenImproper_ShouldThrowMoodAnalysisException()
+        {
+            try
+            {
+                object result = MoodAnalyserNameFactory.GetMoodAnalyserObject("MoodAnalyser.MoodAnalyser", "MoodAnalyser");
+            }
+            catch (MoodAnalyserException exception)
+            {
+                Assert.AreEqual(MoodAnalyserException.ExceptionType.NO_SUCH_CLASS, exception.exceptionType);
+            }
+        }
+        [Test]
+        public void GivenMoodAnalyserClassName_WhenConstructorNameIsImproper_ShouldThrowMoodAnalysisException()
+        {
+            try
+            {
+                object result = MoodAnalyserNameFactory.GetMoodAnalyserObject("MoodAnalyserNameSpace.MoodAnalyser", "MoodAnalys");
+            }
+            catch (MoodAnalyserException exception)
+            {
+                Assert.AreEqual(MoodAnalyserException.ExceptionType.NO_SUCH_METHOD, exception.exceptionType);
             }
         }
     }
