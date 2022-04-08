@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace MoodAnalyserSpace
 {
-    public class MoodAnalyserNameFactory
+    public class MoodAnalyserFactory
     {
         public static object GetMoodAnalyserObject(string ClassName, string ConstructorName)
         {
@@ -48,6 +48,21 @@ namespace MoodAnalyserSpace
             }
             else
                 throw new MoodAnalyserException(MoodAnalyserException.ExceptionType.NO_SUCH_CLASS, "class not found");
+        }
+        public static string InvokeAnalyseMood(string Message, string MethodName)
+        {
+            try
+            {
+                Type type = Type.GetType("MoodAnalyserSpace.MoodAnalyser");
+                object MoodAnalyserObject = GetMoodAnalyserObjectWithParamterizedConstructor("MoodAnalyserSpace.MoodAnalyser", "MoodAnalyser", Message);
+                MethodInfo AnalyseMoodInfo = type.GetMethod(MethodName);
+                object mood = AnalyseMoodInfo.Invoke(MoodAnalyserObject, null);
+                return mood.ToString();
+            }
+            catch (NullReferenceException)
+            {
+                throw new MoodAnalyserException(MoodAnalyserException.ExceptionType.NO_SUCH_METHOD, "constructor not found");
+            }
         }
     }
 }

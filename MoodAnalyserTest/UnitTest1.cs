@@ -59,7 +59,7 @@ namespace MoodAnalyserTest
         public void GivenMoodAnalyserClassName_WhenProper_ShouldReturnMoodAnalyserObject()
         {
             object expected = new MoodAnalyser();
-            object result = MoodAnalyserNameFactory.GetMoodAnalyserObject("MoodAnalyserNameSpace.MoodAnalyser", "MoodAnalyser");
+            object result = MoodAnalyserFactory.GetMoodAnalyserObject("MoodAnalyserSpace.MoodAnalyser", "MoodAnalyser");
             expected.Equals(result);
         }
 
@@ -68,7 +68,7 @@ namespace MoodAnalyserTest
         {
             try
             {
-                object result = MoodAnalyserNameFactory.GetMoodAnalyserObject("MoodAnalyser.MoodAnalyser", "MoodAnalyser");
+                object result = MoodAnalyserFactory.GetMoodAnalyserObject("MoodAnalyser.MoodAnalyser", "MoodAnalyser");
             }
             catch (MoodAnalyserException exception)
             {
@@ -80,7 +80,7 @@ namespace MoodAnalyserTest
         {
             try
             {
-                object result = MoodAnalyserNameFactory.GetMoodAnalyserObject("MoodAnalyserNameSpace.MoodAnalyser", "MoodAnalys");
+                object result = MoodAnalyserFactory.GetMoodAnalyserObject("MoodAnalyserSpace.MoodAnalyser", "MoodAnalys");
             }
             catch (MoodAnalyserException exception)
             {
@@ -92,7 +92,7 @@ namespace MoodAnalyserTest
         public void GivenMoodAnalyserClassNameWithParametrizedConstructor_WhenProper_ShouldReturnMoodAnalyserObject()
         {
             object expected = new MoodAnalyser("HAPPY");
-            object result = MoodAnalyserNameFactory.GetMoodAnalyserObjectWithParamterizedConstructor("MoodAnalyserNameSpace.MoodAnalyser", "MoodAnalyser", "HAPPY");
+            object result = MoodAnalyserFactory.GetMoodAnalyserObjectWithParamterizedConstructor("MoodAnalyserSpace.MoodAnalyser", "MoodAnalyser", "HAPPY");
             expected.Equals(result);
         }
 
@@ -101,7 +101,7 @@ namespace MoodAnalyserTest
         {
             try
             {
-                object result = MoodAnalyserNameFactory.GetMoodAnalyserObjectWithParamterizedConstructor("MoodAnalyserNameSpace.MoodAnalyser", "MoodAnalyser", "HAPPY");
+                object result = MoodAnalyserFactory.GetMoodAnalyserObjectWithParamterizedConstructor("MoodAnalyserSpace.MoodAnalyser", "MoodAnalyser", "HAPPY");
             }
             catch (MoodAnalyserException exception)
             {
@@ -114,7 +114,26 @@ namespace MoodAnalyserTest
         {
             try
             {
-                object result = MoodAnalyserNameFactory.GetMoodAnalyserObjectWithParamterizedConstructor("MoodAnalyserNameSpace.MoodAnalyser", "MoodAnalyser", "HAPPY");
+                object result = MoodAnalyserFactory.GetMoodAnalyserObjectWithParamterizedConstructor("MoodAnalyserSpace.MoodAnalyser", "MoodAnalyser", "HAPPY");
+            }
+            catch (MoodAnalyserException exception)
+            {
+                Assert.AreEqual(MoodAnalyserException.ExceptionType.NO_SUCH_METHOD, exception.exceptionType);
+            }
+        }
+        [Test]
+        public void GivenMessage_WhenHappy_UsingReflection_ShouldReturnHappy()
+        {
+            object result = MoodAnalyserFactory.InvokeAnalyseMood("I am in Happy Mood", "AnalyseMood");
+            Assert.AreEqual("HAPPY", result);
+        }
+
+        [Test]
+        public void GivenMessage_WhenImproperMethodName_UsingReflection_ShouldThrowMoodAnalysisException()
+        {
+            try
+            {
+                object result = MoodAnalyserFactory.InvokeAnalyseMood("I am in Happy Mood", "Analyse");
             }
             catch (MoodAnalyserException exception)
             {
